@@ -5,6 +5,9 @@ service: billing-db
 app: billing-db
 org: julesballaran
 
+plugins:
+  - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs12.x
