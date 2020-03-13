@@ -18,7 +18,8 @@ module.exports = {
             billable_rate: parseFloat(element.content.bill_rate),
             did_rate: parseFloat(element.content.did_rate),
             performance_rate: parseFloat(element.content.performance_rate),
-            original_data: false
+            original_data: false,
+            billing_type: req.body.billingType
           }).save();
         });
 
