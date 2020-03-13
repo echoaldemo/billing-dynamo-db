@@ -2,8 +2,8 @@
 
 service: billing-db
 
-app: billing-db
-org: julesballaran
+# app: billing-db
+# org: julesballaran
 
 plugins:
   - serverless-offline
@@ -19,7 +19,7 @@ functions:
     handler: index.handler
     events:
       - http: ANY /
-      - http: 'ANY {proxy+}'
+      - http: "ANY {proxy+}"
 # package:
 #   exclude:
 #     - node_modules/**
