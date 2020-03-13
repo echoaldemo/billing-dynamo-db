@@ -64,4 +64,6 @@ app.post("/api/zapier/gmail", zapier.gmail);
 app.post("/api/zapier/slack", zapier.slack);
 app.post("/api/aws/upload", aws.upload);
 
-module.exports.handler = serverless(app);
+module.exports.handler = serverless(app, {
+  binary: ["image/png", "image/gif"]
+});

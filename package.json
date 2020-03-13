@@ -23,6 +23,7 @@
     "uuid": "^7.0.2"
   },
   "devDependencies": {
+    "serverless-apigw-binary": "^0.4.4",
     "serverless-offline": "^5.12.1"
   }
 }

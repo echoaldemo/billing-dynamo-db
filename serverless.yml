@@ -7,6 +7,12 @@ service: billing-db
 
 plugins:
   - serverless-offline
+  - serverless-apigw-binary
+
+custom:
+  apigwBinary:
+    types:
+      - "*/*"
 
 provider:
   name: aws

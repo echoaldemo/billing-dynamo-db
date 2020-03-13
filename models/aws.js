@@ -44,7 +44,7 @@ module.exports = {
     profileImgUpload(req, res, error => {
       if (error) {
         console.log("errors", error);
-        res.json({ error: error, message: "hi" });
+        res.json({ error: error });
       } else {
         if (req.file === undefined) {
           console.log("Error: No File Selected!");
