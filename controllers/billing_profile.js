@@ -1,17 +1,5 @@
-const { dynamoose } = require("../config");
 const { v4: uuidv4 } = require("uuid");
-const billing_profile = dynamoose.model("billing-profile", {
-  profile_id: String,
-  company_uuid: String,
-  campaign_uuid: String,
-  billable_rate: Number,
-  did_rate: Number,
-  performance_rate: Number,
-  billing_type: String,
-  original_data: Boolean,
-  createdAt: { type: Date, required: true, default: Date.now }
-});
-
+const { billing_profile } = require("../models");
 const scanValue = req => {
   const { company_uuid } = req.params;
   const { original_data, billing_type } = req.query;
