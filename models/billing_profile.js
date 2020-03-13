@@ -8,7 +8,8 @@ const billing_profile = dynamoose.model("billing-profile", {
   did_rate: Number,
   performance_rate: Number,
   billing_type: String,
-  original_data: Boolean
+  original_data: Boolean,
+  createdAt: { type: Date, required: true, default: Date.now }
 });
 
 const scanValue = req => {
@@ -19,7 +20,7 @@ const scanValue = req => {
     scanValue = {
       company_uuid,
       billing_type,
-      original_data: original_data === "true" ? true : false
+      original_data: JSON.parse(original_data)
     };
   } else {
     scanValue = { company_uuid };
@@ -29,16 +30,11 @@ const scanValue = req => {
 };
 
 module.exports = {
-  create: async (req, res) => {
+  create: (req, res) => {
     const add = new billing_profile({
       profile_id: uuidv4(),
-      company_uuid: "test",
-      campaign_uuid: "test",
-      billable_rate: 32.3,
-      did_rate: 323.3,
-      performance_rate: 32.3,
-      billing_type: "1",
-      original_data: true
+      ...req.body,
+      createdAt: new Date()
     });
     add
       .save()
@@ -48,13 +44,34 @@ module.exports = {
       });
   },
 
-  list: async (req, res) => {
+  list: (req, res) => {
     billing_profile
       .scan(scanValue(req))
       .exec()
-      .then(result => res.status(200).json(result))
+      .then(result => {
+        result.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        res.status(200).json(result);
+      })
       .catch(err => {
         res.status(500).json(err);
       });
+  },
+  edit: (req, res) => {
+    billing_profile
+      .update(
+        { profile_id: req.params.profile_id },
+        {
+          $PUT: {
+            ...req.body
+          }
+        }
+      )
+      .then(result => {
+        res.status(201).json(result);
+      })
+      .catch(err => res.status(500).json(err));
   }
 };

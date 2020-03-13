@@ -1,6 +1,6 @@
 const { dynamoose } = require('../config')
 const { v4: uuidv4 } = require('uuid')
-const users = dynamoose.model('billing-user', {
+const users = dynamoose.model('billing-users', {
   id: String,
   googleId: String,
   email: String,
@@ -27,11 +27,37 @@ module.exports = {
       })
   },
   list: (req, res) => {
-    users.query
+    users
+      .scan()
       .all()
+      .exec()
       .then(result => res.status(200).json(result))
-      .catch(err => {
-        res.status(500).json(err)
-      })
+      .catch(err => res.status(500).json(err))
+  },
+  getById: (req, res) => {
+    users
+      .scan({ googleId: req.params.id })
+      .exec()
+      .then(result => res.status(200).json(result[0]))
+      .catch(err => res.status(500).json(err))
+  },
+  delete: (req, res) => {
+    users
+      .delete(req.params.id)
+      .then(cont => res.status(200).json(cont))
+      .catch(err => res.status(500).json(err))
+  },
+  edit: (req, res) => {
+    users
+      .update(
+        { id: req.params.id },
+        {
+          $PUT: {
+            ...req.body
+          }
+        }
+      )
+      .then(result => res.status(201).json(result))
+      .catch(err => res.status(500).json(err))
   }
 }
