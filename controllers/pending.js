@@ -1,4 +1,4 @@
-const { pending } = require('../models')
+const { pending, billing_profile } = require('../models')
 const { v4: uuidv4 } = require('uuid')
 
 module.exports = {
@@ -9,10 +9,24 @@ module.exports = {
     })
     add
       .save()
-      .then(result => res.status(201).json(result))
-      .catch(err => {
-        res.status(500).json(err)
+      .then(result => {
+        const bp = result.campaigns.map(element => {
+          if (element.content) {
+            return {
+              company_uuid: element.company,
+              campaign_uuid: element.uuid,
+              billable_rate: parseFloat(element.content.bill_rate),
+              did_rate: parseFloat(element.content.did_rate),
+              performance_rate: parseFloat(element.content.performance_rate),
+              original_data: false,
+              billing_type: billingType
+            }
+          }
+        })
+        billing_profile.batchPut(bp).catch(err => res.status(500).json(err))
+        res.status(201).json(result)
       })
+      .catch(err => res.status(500).json(err))
   },
   delete: (req, res) => {
     pending
