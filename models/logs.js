@@ -1,22 +1,21 @@
 const { dynamoose } = require("../config");
 const { v4: uuidv4 } = require("uuid");
-const users = dynamoose.model("billing-user", {
+const dateUtil = require("../utils/date");
+const logs = dynamoose.model("billing-logs", {
   id: String,
-  googleId: String,
-  email: String,
-  familyName: String,
-  givenName: String,
-  imageUrl: String,
-  name: String,
+  date: String,
+  time: String,
   type: String,
-  company: String,
-  status: String
+  description: String,
+  invoiceId: String
 });
 
 module.exports = {
   add: async (req, res) => {
-    const add = new users({
+    const add = new logs({
       id: uuidv4(),
+      date: dateUtil.getDate(),
+      time: dateUtil.getTime(),
       ...req.body
     });
     add
@@ -27,7 +26,7 @@ module.exports = {
       });
   },
   list: (req, res) => {
-    users
+    logs
       .scan()
       .all()
       .exec()
