@@ -25,7 +25,8 @@ const pending = dynamoose.model('billing-pending-invoice', {
   startDate: String,
   billingType: String,
   total: String,
-  status: Number
+  status: Number,
+  edited: String
 })
 
 const logs = dynamoose.model('billing-logs', {

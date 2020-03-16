@@ -12,7 +12,9 @@ plugins:
 custom:
   apigwBinary:
     types:
-      - "*/*"
+      - '*/*'
+  serverless-offline:
+    port: 15001
 
 provider:
   name: aws
@@ -25,7 +27,7 @@ functions:
     handler: index.handler
     events:
       - http: ANY /
-      - http: "ANY {proxy+}"
+      - http: 'ANY {proxy+}'
 # package:
 #   exclude:
 #     - node_modules/**
