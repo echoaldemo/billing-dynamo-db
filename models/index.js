@@ -10,7 +10,8 @@ const users = dynamoose.model('billing-users', {
   name: String,
   type: String,
   company: String,
-  status: String
+  status: String,
+  edited: String
 })
 
 const pending = dynamoose.model('billing-pending-invoice', {

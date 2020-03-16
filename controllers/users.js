@@ -5,6 +5,7 @@ module.exports = {
   add: (req, res) => {
     const add = new users({
       id: uuidv4(),
+      edited: new Date().valueOf(),
       ...req.body
     })
     add
@@ -18,7 +19,11 @@ module.exports = {
     users
       .scan()
       .exec()
-      .then(result => res.status(200).json(result))
+      .then(result =>
+        res
+          .status(200)
+          .json(result.sort((a, b) => (a.edited < b.edited ? 1 : -1)))
+      )
       .catch(err => res.status(500).json(err))
   },
   getById: (req, res) => {
@@ -40,7 +45,8 @@ module.exports = {
         { id: req.params.id },
         {
           $PUT: {
-            ...req.body
+            ...req.body,
+            edited: new Date().valueOf()
           }
         }
       )
