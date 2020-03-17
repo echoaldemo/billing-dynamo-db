@@ -8,7 +8,7 @@ const scanValue = req => {
     scanValue = {
       company_uuid,
       billing_type,
-      original_data: JSON.parse(original_data)
+      original_data: original_data === "true" ? true : false
     };
   } else {
     scanValue = { company_uuid };
