@@ -8,6 +8,7 @@ module.exports = {
       id: uuidv4(),
       date: dateUtil.getDate(),
       time: dateUtil.getTime(),
+      edited: new Date().valueOf(),
       ...req.body
     })
     add
@@ -22,7 +23,7 @@ module.exports = {
       .scan()
       .all()
       .exec()
-      .then(result => res.status(200).json(result))
+      .then(result => res.status(200).json(result.sort((a, b) => (a.edited < b.edited ? 1 : -1))))
       .catch(err => {
         res.status(500).json(err)
       })

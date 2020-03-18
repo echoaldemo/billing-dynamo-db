@@ -11,19 +11,20 @@ module.exports = {
     add
       .save()
       .then(result => {
-        result.campaigns.forEach(element => {
-          new billing_profile({
-            profile_id: uuidv4(),
-            company_uuid: element.company,
-            campaign_uuid: element.uuid,
-            billable_rate: parseFloat(element.content.bill_rate),
-            did_rate: parseFloat(element.content.did_rate),
-            performance_rate: parseFloat(element.content.performance_rate),
-            original_data: false,
-            billing_type: req.body.billingType
-          }).save()
-        })
-
+        if(req.body.invoiceType.match(/automatic/i)){ 
+          result.campaigns.forEach(element => {
+            new billing_profile({
+              profile_id: uuidv4(),
+              company_uuid: element.company,
+              campaign_uuid: element.uuid,
+              billable_rate: parseFloat(element.content.bill_rate),
+              did_rate: parseFloat(element.content.did_rate),
+              performance_rate: parseFloat(element.content.performance_rate),
+              original_data: false,
+              billing_type: req.body.billingType
+            }).save()
+          })
+        }
         res.status(201).json(result)
       })
       .catch(err => res.status(500).json(err))

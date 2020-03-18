@@ -36,7 +36,8 @@ const logs = dynamoose.model('billing-logs', {
   time: String,
   type: String,
   description: String,
-  invoiceId: String
+  invoiceId: String,
+  edited: String
 })
 
 const billing_profile = dynamoose.model('billing-profile', {
