@@ -61,9 +61,15 @@ app.get("/api/rate/:company_uuid", billing_profile.list);
 app.post("/api/rate", billing_profile.create);
 app.patch("/api/rate/:profile_id", billing_profile.edit);
 
+app.get("/test", (req, res) => {
+
+  res.send("Working fine")
+})
+
 app.post("/api/zapier/gmail", zapier.gmail);
 app.post("/api/zapier/trello", zapier.trello);
 app.post("/api/aws/upload", aws.upload);
+
 
 module.exports.handler = serverless(app, {
   binary: ["image/png", "image/gif"]

@@ -43,10 +43,7 @@ const logs = dynamoose.model('billing-logs', {
 const billing_profile = dynamoose.model('billing-profile', {
   profile_id: String,
   company_uuid: String,
-  campaign_uuid: String,
-  billable_rate: Number,
-  did_rate: Number,
-  performance_rate: Number,
+  rates: Array,
   billing_type: String,
   original_data: Boolean,
   createdAt: { type: Date, required: true, default: Date.now }
