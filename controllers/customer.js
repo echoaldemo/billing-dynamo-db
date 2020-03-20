@@ -1,6 +1,14 @@
+const OAuthClient = require('intuit-oauth')
+const { billing_settings } = require('../models')
+
 module.exports = {
-  list: (req, res) => {
-    const oauthClient = req.app.get('oauth')
+  list: async (req, res) => {
+    const result = await billing_settings
+      .query('settings_id')
+      .eq('quickbooks')
+      .exec()
+    const oauthClient = new OAuthClient(result[0].settings.oauth)
+
     const companyID = oauthClient.getToken().realmId
 
     const url =
@@ -20,7 +28,12 @@ module.exports = {
       })
   },
   view: (req, res) => {
-    const oauthClient = req.app.get('oauth')
+    const result = await billing_settings
+      .query('settings_id')
+      .eq('quickbooks')
+      .exec()
+    const oauthClient = new OAuthClient(result[0].settings.oauth)
+    
     const companyID = oauthClient.getToken().realmId
 
     const url =
