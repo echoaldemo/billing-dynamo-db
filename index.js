@@ -60,6 +60,7 @@ app.get("/api/logs/list", logs.list);
 app.get("/api/rate/:company_uuid", billing_profile.list);
 app.post("/api/rate", billing_profile.create);
 app.patch("/api/rate/:profile_id", billing_profile.edit);
+app.get("/api/rate/company/:company_uuid", billing_profile.getByCompany);
 
 app.get("/test", (req, res) => {
 

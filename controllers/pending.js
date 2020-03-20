@@ -11,20 +11,31 @@ module.exports = {
     add
       .save()
       .then(result => {
-        if(req.body.invoiceType.match(/automatic/i)){ 
-          result.campaigns.forEach(element => {
-            new billing_profile({
-              profile_id: uuidv4(),
-              company_uuid: element.company,
-              campaign_uuid: element.uuid,
-              billable_rate: parseFloat(element.content.bill_rate),
-              did_rate: parseFloat(element.content.did_rate),
-              performance_rate: parseFloat(element.content.performance_rate),
-              original_data: false,
-              billing_type: req.body.billingType
-            }).save()
-          })
-        }
+        const { campaigns, company } = result
+        new billing_profile({
+          profile_id: uuidv4(),
+          company_uuid: company.uuid,
+          company_slug: company.slug,
+          company_name: company.name,
+          rates: campaigns,
+          original_data: false,
+          billing_type: req.body.billingType
+        }).save()
+        // if (req.body.invoiceType.match(/automatic/i)) {
+
+        //   result.campaigns.forEach(element => {
+        //     new billing_profile({
+        //       profile_id: uuidv4(),
+        //       company_uuid: element.company,
+        //       campaign_uuid: element.uuid,
+        //       billable_rate: parseFloat(element.content.bill_rate),
+        //       did_rate: parseFloat(element.content.did_rate),
+        //       performance_rate: parseFloat(element.content.performance_rate),
+        //       original_data: false,
+        //       billing_type: req.body.billingType
+        //     }).save()
+        //   })
+        // }
         res.status(201).json(result)
       })
       .catch(err => res.status(500).json(err))

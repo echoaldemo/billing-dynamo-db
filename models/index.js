@@ -43,6 +43,8 @@ const logs = dynamoose.model('billing-logs', {
 const billing_profile = dynamoose.model('billing-profile', {
   profile_id: String,
   company_uuid: String,
+  company_name: String,
+  company_slug: String,
   rates: Array,
   billing_type: String,
   original_data: Boolean,
