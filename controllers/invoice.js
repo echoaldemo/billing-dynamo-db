@@ -2,7 +2,7 @@ const OAuthClient = require('intuit-oauth')
 const { billing_settings } = require('../models')
 
 module.exports = {
-  list: (req, res) => {
+  list: async (req, res) => {
     const result = await billing_settings
       .query('settings_id')
       .eq('quickbooks')
@@ -26,7 +26,7 @@ module.exports = {
         console.error(e)
       })
   },
-  view: (req, res) => {
+  view: async (req, res) => {
     const result = await billing_settings
       .query('settings_id')
       .eq('quickbooks')
@@ -50,7 +50,7 @@ module.exports = {
         console.error(e)
       })
   },
-  post: (req, res) => {
+  post: async (req, res) => {
     const result = await billing_settings
       .query('settings_id')
       .eq('quickbooks')

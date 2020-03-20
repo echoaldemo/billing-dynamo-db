@@ -27,13 +27,13 @@ module.exports = {
         console.error(e)
       })
   },
-  view: (req, res) => {
+  view: async (req, res) => {
     const result = await billing_settings
       .query('settings_id')
       .eq('quickbooks')
       .exec()
     const oauthClient = new OAuthClient(result[0].settings.oauth)
-    
+
     const companyID = oauthClient.getToken().realmId
 
     const url =

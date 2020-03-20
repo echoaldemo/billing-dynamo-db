@@ -2,7 +2,7 @@ const OAuthClient = require('intuit-oauth')
 const { billing_settings } = require('../models')
 
 module.exports = {
-  list: (req, res) => {
+  list: async (req, res) => {
     const result = await billing_settings
       .query('settings_id')
       .eq('quickbooks')
