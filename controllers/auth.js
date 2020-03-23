@@ -26,8 +26,8 @@ module.exports = {
       .then(() => res.send(authUri))
       .catch(err => res.status(500).json(err))
   },
-  callback: (req, res) => {
-    billing_settings
+  callback: async (req, res) => {
+    await billing_settings
       .query('settings_id')
       .eq('quickbooks')
       .exec()
@@ -59,29 +59,27 @@ module.exports = {
       .query('settings_id')
       .eq('quickbooks')
       .exec()
-    const oauthClient = new OAuthClient(result[0].settings.oauth)
-    oauthClient
-      .refresh()
-      .then(function(authResponse) {
-        const add = new billing_settings({
-          settings_id: 'quickbooks',
-          settings: {
-            oauth: oauthClient
-          }
+    try {
+      const oauthClient = new OAuthClient(result[0].settings.oauth)
+      oauthClient
+        .refresh()
+        .then(function(authResponse) {
+          const add = new billing_settings({
+            settings_id: 'quickbooks',
+            settings: {
+              oauth: oauthClient
+            }
+          })
+          add.save()
+          console.log(
+            'The Refresh Token is  ' + JSON.stringify(authResponse.getJson())
+          )
+          res.send(JSON.stringify(authResponse.getJson(), null, 2))
         })
-        add.save()
-        console.log(
-          'The Refresh Token is  ' + JSON.stringify(authResponse.getJson())
-        )
-        // req.app.set(
-        //   'token',
-        //   JSON.stringify(authResponse.getJson(), null, 2)
-        // )
-        res.send(JSON.stringify(authResponse.getJson(), null, 2))
-      })
-      .catch(function(e) {
-        console.error(e)
-      })
+        .catch(err => res.status(500).json(err))
+    } catch (err) {
+      res.status(500).json(err)
+    }
   },
   disconnect: async (req, res) => {
     const result = await billing_settings
