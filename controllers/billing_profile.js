@@ -8,7 +8,7 @@ const scanValue = req => {
     scanValue = {
       company_uuid,
       billing_type,
-      original_data: original_data === "true" ? true : false
+      original_data: JSON.parse(original_data)
     };
   } else {
     scanValue = { company_uuid };
@@ -31,8 +31,19 @@ module.exports = {
         res.status(500).json(err);
       });
   },
-
+  getByCompany: (req, res) => {
+    billing_profile
+      .scan(scanValue(req))
+      .exec()
+      .then(result => {
+        res.status(200).json(result[0]);
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      });
+  },
   list: (req, res) => {
+
     billing_profile
       .scan(scanValue(req))
       .exec()

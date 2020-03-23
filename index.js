@@ -57,13 +57,15 @@ app.get('/api/pending/deleted/list', pending.listDeleted)
 app.post('/api/logs/create', logs.add)
 app.get('/api/logs/list', logs.list)
 
-app.get('/api/rate/:company_uuid', billing_profile.list)
-app.post('/api/rate', billing_profile.create)
-app.patch('/api/rate/:profile_id', billing_profile.edit)
+app.get("/api/rate/:company_uuid", billing_profile.list);
+app.post("/api/rate", billing_profile.create);
+app.patch("/api/rate/:profile_id", billing_profile.edit);
+app.get("/api/rate/company/:company_uuid", billing_profile.getByCompany);
 
 app.post('/api/zapier/gmail', zapier.gmail)
 app.post('/api/zapier/trello', zapier.trello)
 app.post('/api/aws/upload', aws.upload)
+
 
 module.exports.handler = serverless(app, {
   binary: ['image/png', 'image/gif']
