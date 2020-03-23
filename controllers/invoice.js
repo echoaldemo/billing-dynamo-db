@@ -62,7 +62,7 @@ module.exports = {
       oauthClient.environment === 'sandbox'
         ? OAuthClient.environment.sandbox
         : OAuthClient.environment.production
-
+    delete req.body.edited
     oauthClient
       .makeApiCall({
         url: url + `/v3/company/${companyID}/invoice`,
@@ -76,8 +76,6 @@ module.exports = {
       .then(function(authResponse) {
         res.send(JSON.parse(authResponse.text()))
       })
-      .catch(function(e) {
-        console.error(e)
-      })
+      .catch(err => res.status(500).json(err))
   }
 }
