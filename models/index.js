@@ -51,9 +51,15 @@ const billing_profile = dynamoose.model('billing-profile', {
   createdAt: { type: Date, required: true, default: Date.now }
 })
 
+const billing_settings = dynamoose.model('billing-settings', {
+  settings_id: String,
+  settings: Object
+})
+
 module.exports = {
   users,
   pending,
   logs,
-  billing_profile
+  billing_profile,
+  billing_settings
 }
