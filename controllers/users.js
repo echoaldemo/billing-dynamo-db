@@ -1,5 +1,7 @@
+const jwt = require('jsonwebtoken')
 const { users } = require('../models')
 const { v4: uuidv4 } = require('uuid')
+const secret = require('../secret')
 
 module.exports = {
   add: (req, res) => {
@@ -10,7 +12,10 @@ module.exports = {
     })
     add
       .save()
-      .then(result => res.status(201).json(result))
+      .then(result => {
+        const token = jwt.sign({ googleId: req.params.id }, secret)
+        res.status(201).json({ ...result, token })
+      })
       .catch(err => {
         res.status(500).json(err)
       })
@@ -30,7 +35,14 @@ module.exports = {
     users
       .scan({ googleId: req.params.id })
       .exec()
-      .then(result => res.status(200).json(result[0]))
+      .then(result => {
+        if (result[0]) {
+          const token = jwt.sign({ googleId: req.params.id }, secret)
+          res.status(200).json({ ...result[0], token })
+        } else {
+          res.status(404).json({ msg: 'no user' })
+        }
+      })
       .catch(err => res.status(500).json(err))
   },
   delete: (req, res) => {
