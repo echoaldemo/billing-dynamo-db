@@ -68,6 +68,7 @@ app.post('/api/zapier/trello', zapier.trello)
 app.post('/api/aws/upload', aws.upload)
 
 app.get('/domo/refresh', domo.refresh)
+app.post('/api/domo/billable', domo.billable)
 
 module.exports.handler = serverless(app, {
   binary: ['image/png', 'image/gif']
