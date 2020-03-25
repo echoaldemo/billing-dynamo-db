@@ -71,9 +71,9 @@ module.exports = {
             }
           })
           add.save()
-          console.log(
-            'The Refresh Token is  ' + JSON.stringify(authResponse.getJson())
-          )
+          // console.log(
+          //   'The Refresh Token is  ' + JSON.stringify(authResponse.getJson())
+          // )
           res.send(JSON.stringify(authResponse.getJson(), null, 2))
         })
         .catch(err => res.status(500).json(err))
