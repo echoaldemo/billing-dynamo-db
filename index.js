@@ -48,8 +48,9 @@ app.get('/api/invoice', auth, invoice.list)
 app.get('/api/invoice/:id', auth, invoice.view)
 app.post('/api/invoice', auth, invoice.post)
 
-app.get('/api/customer', auth, customer.list)
-app.get('/api/customer/:id', auth, customer.list)
+app.get('/api/customer/list', auth, customer.list)
+app.get('/api/customer/:id', auth, customer.view)
+app.post('/api/customer/create', auth, customer.create)
 
 app.get('/api/item', auth, item.list)
 
