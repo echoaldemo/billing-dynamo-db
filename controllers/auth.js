@@ -51,10 +51,7 @@ module.exports = {
       })
     res.send('')
   },
-  token: (req, res) => {
-    res.send(req.app.get('token'))
-  },
-  refresh: async (req, res) => {
+  refresh: async (req, res, next) => {
     const result = await billing_settings
       .query('settings_id')
       .eq('quickbooks')
@@ -71,27 +68,42 @@ module.exports = {
             }
           })
           add.save()
-          // console.log(
-          //   'The Refresh Token is  ' + JSON.stringify(authResponse.getJson())
-          // )
-          res.send(JSON.stringify(authResponse.getJson(), null, 2))
+          next()
         })
         .catch(err => res.status(500).json(err))
     } catch (err) {
       res.status(500).json(err)
     }
   },
-  disconnect: async (req, res) => {
+  disconnect: (req, res) => {
+    billing_settings
+      .delete('quickbooks')
+      .then(cont => res.status(200).json(cont))
+      .catch(err => res.status(500).json(err))
+  },
+  company: async (req, res) => {
     const result = await billing_settings
       .query('settings_id')
       .eq('quickbooks')
       .exec()
     const oauthClient = new OAuthClient(result[0].settings.oauth)
-    console.log('The disconnect called ')
-    const authUri = oauthClient.authorizeUri({
-      scope: [OAuthClient.scopes.OpenId, OAuthClient.scopes.Email],
-      state: 'intuit-test'
-    })
-    res.send(authUri)
+
+    const companyID = oauthClient.getToken().realmId
+
+    const url =
+      oauthClient.environment === 'sandbox'
+        ? OAuthClient.environment.sandbox
+        : OAuthClient.environment.production
+
+    oauthClient
+      .makeApiCall({
+        url: url + `/v3/company/${companyID}/companyinfo/${companyID}`
+      })
+      .then(function(authResponse) {
+        res.send(JSON.parse(authResponse.text()))
+      })
+      .catch(function(e) {
+        console.error(e)
+      })
   }
 }
