@@ -39,10 +39,10 @@ const auth = (req, res, next) => {
 app.set('oauth', null)
 app.set('token', null)
 app.post('/authUri', urlencodedParser, auth, qb_auth.authUri)
-app.get('/callback', auth, qb_auth.callback)
-app.get('/retrieveToken', auth, qb_auth.token)
+app.get('/callback', qb_auth.callback)
 app.get('/refreshAccessToken', auth, qb_auth.refresh)
-app.get('/disconnect', auth, qb_auth.disconnect)
+app.get('/api/qb/disconnect', qb_auth.disconnect)
+app.get('/api/qb/company', qb_auth.refresh, qb_auth.company)
 
 app.get('/api/invoice', auth, invoice.list)
 app.get('/api/invoice/:id', auth, invoice.view)
