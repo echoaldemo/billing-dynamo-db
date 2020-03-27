@@ -1,9 +1,9 @@
 const dynamoose = require('dynamoose')
 
 dynamoose.AWS.config.update({
-  accessKeyId: 'AKIA4RN7LHMEODSFNUHM',
-  secretAccessKey: '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',
-  region: 'us-east-1'
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY,
+  region: process.env.AWS_REGION
 })
 
 module.exports = { dynamoose }

@@ -1,3 +1,4 @@
+require('dotenv').config()
 const serverless = require('serverless-http')
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -36,24 +37,22 @@ const auth = (req, res, next) => {
   }
 }
 
-app.set('oauth', null)
-app.set('token', null)
 app.post('/authUri', urlencodedParser, auth, qb_auth.authUri)
 app.get('/callback', qb_auth.callback)
 app.get('/refreshAccessToken', auth, qb_auth.refresh)
-app.get('/api/qb/disconnect', qb_auth.disconnect)
-app.get('/api/qb/company', qb_auth.refresh, qb_auth.company)
+app.get('/api/qb/disconnect', auth, qb_auth.disconnect)
+app.get('/api/qb/company', auth, qb_auth.refresh, qb_auth.company)
 
-app.get('/api/invoice', auth, invoice.list)
-app.get('/api/invoice/:id', auth, invoice.view)
-app.post('/api/invoice', auth, invoice.post)
+app.get('/api/invoice', auth, qb_auth.refresh, invoice.list)
+app.get('/api/invoice/:id', auth, qb_auth.refresh, invoice.view)
+app.post('/api/invoice', auth, qb_auth.refresh, invoice.post)
 
-app.get('/api/customer/list', auth, customer.list)
-app.get('/api/customer/:id', auth, customer.view)
-app.post('/api/customer/create', auth, customer.create)
-app.get('/api/customer/view/:slug', auth, customer.slug)
+app.get('/api/customer/list', auth, qb_auth.refresh, customer.list)
+app.get('/api/customer/:id', auth, qb_auth.refresh, customer.view)
+app.post('/api/customer/create', auth, qb_auth.refresh, customer.create)
+app.get('/api/customer/view/:slug', auth, qb_auth.refresh, customer.slug)
 
-app.get('/api/item', auth, item.list)
+app.get('/api/item', auth, qb_auth.refresh, item.list)
 
 app.post('/api/users/create', users.add)
 app.get('/api/users/list', auth, users.list)
@@ -80,7 +79,6 @@ app.post('/api/zapier/gmail', auth, zapier.gmail)
 app.post('/api/zapier/trello', auth, zapier.trello)
 app.post('/api/aws/upload', auth, aws.upload)
 
-app.get('/domo/refresh', auth, domo.refresh)
 app.post('/api/domo/billable', auth, domo.billable)
 
 module.exports.handler = serverless(app, {

@@ -1,16 +1,14 @@
 const { pending, billing_profile } = require('../models')
 const { v4: uuidv4 } = require('uuid')
 
-
-const modifyCampaigns = (campaigns) => {
-
+const modifyCampaigns = campaigns => {
   campaigns.forEach(element => {
     element.content = {
       bill_rate: parseFloat(element.content.bill_rate),
       performance_rate: parseFloat(element.content.performance_rate),
       did_rate: parseFloat(element.content.did_rate)
     }
-  });
+  })
 
   return campaigns
 }

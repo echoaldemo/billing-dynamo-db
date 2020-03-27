@@ -9,7 +9,6 @@ module.exports = {
       environment: req.body.data.json.environment,
       redirectUri: req.body.data.json.redirectUri
     })
-    req.app.set('oauth', oauthClient)
 
     const add = new billing_settings({
       settings_id: 'quickbooks',
