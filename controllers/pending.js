@@ -22,17 +22,18 @@ module.exports = {
     add
       .save()
       .then(result => {
-        const { campaigns, company } = result
-        new billing_profile({
-          profile_id: uuidv4(),
-          company_uuid: company.uuid,
-          company_slug: company.slug,
-          company_name: company.name,
-          rates: modifyCampaigns(campaigns),
-          original_data: false,
-          billing_type: req.body.billingType
-        }).save()
-
+        try {
+          const { campaigns, company } = result
+          new billing_profile({
+            profile_id: uuidv4(),
+            company_uuid: company.uuid,
+            company_slug: company.slug,
+            company_name: company.name,
+            rates: modifyCampaigns(campaigns),
+            original_data: false,
+            billing_type: req.body.billingType
+          }).save()
+        } catch{ }
         res.status(201).json(result)
       })
       .catch(err => res.status(500).json(err))
